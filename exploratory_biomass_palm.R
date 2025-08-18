@@ -10,15 +10,28 @@ Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/1
 
 bio_dap <- lm (biomassa_fresca_g~DAP_cm, data =
                  Biomass_palms_archontophoenix)
-bio_dap_2 <- lm (biomassa_fresca_g~I (DAP_cm*DAP_cm^2), data =
+bio_dap_2 <- lm (biomassa_fresca_g~ DAP_cm * I(DAP_cm^2), data =
                  Biomass_palms_archontophoenix)
+coefficients <- coef(bio_dap_2)
+summary(bio_dap_2)
+anova (bio_dap,bio_dap_2)
 
-summary (anova (bio_dap,bio_dap_2))
 
-summary(bio_dap)
 plot (biomassa_fresca_g~DAP_cm, data =
         Biomass_palms_archontophoenix)
+dev.off()
+par (mfrow =c(2,2))
+plot (bio_dap_2)
+abline (bio_dap)
 abline (bio_dap_2)
+
+curve (coefficients[1] +
+         coefficients[2]*x+
+         coefficients[3]*x+
+         coefficients[4]*x
+       , add=TRUE)
+
+
 
 bio_alt <- lm (biomassa_fresca_g~altura_cm, data =
       Biomass_palms_archontophoenix)
