@@ -3,33 +3,22 @@ class_DBH_alt <- function (x, choice = "ind",
 
   site <-  x
   choices <- c ("ind","bio")
-  if (choice%in%choices==FALSE) {stop ("Speeled choice wrong. \n Use 'ind' or 'bio'")}
   choice <- match(choice, choices)
   diametre_altura <-  c("alt", "dbh")
   diametre_altura <- match(dbh_alt, diametre_altura)
 
   if (choice==1) {
     if (length(class)==1) {
-      if (distribution==TRUE){
-        distri <- c("Temp", "Trop")
-        data_sep_dist <- data.frame()
-        for (i in distri){
-          tag <- i
-          site_sep_distri <- site[site$Distri==i,]
-          site_class<-  site_sep_distri [site_sep_distri$DAP>class,]
-          site_class_number=length(site_class$DAP)
-          site_all_number= length(site$DAP)
-          site_class_percentage = (site_class_number/
-                                     site_all_number) *100
-          data_dap<- data.frame("Class_DAP"= class,
-                                "Distri"= tag,
-                                "Ind_number"=site_class_number,
-                                "Ind_percentage"=site_class_percentage,
-                                "Total_ind"=site_all_number)
-
-          data_sep_dist <- rbind(data_dap,data_sep_dist)
-        }
-        data_dap <- data_sep_dist
+      if (diametre_altura==2){
+        site_class<-  site [site$DAP_cm<class,]
+        site_class_number=length(site_class$DAP_cm)
+        site_all_number= length(site$DAP_cm)
+        site_class_percentage = (site_class_number/
+                                   site_all_number) *100
+        data_dap<- data.frame("Class_DAP"=class,
+                              "Ind_number"=site_class_number,
+                              "Ind_percentage"=site_class_percentage,
+                              "Total_ind"=site_all_number)
       }else{
       site_class<-  site [site$altura_cm<class,]
       site_class_number=length(site_class$altura_cm)
@@ -42,68 +31,53 @@ class_DBH_alt <- function (x, choice = "ind",
                             "Total_ind"=site_all_number)
       }
     } else {
-      if (distribution==TRUE){
-        distri <- c("Temp", "Trop")
-        data_sep_dist <- data.frame()
+      if (diametre_altura==2){
+        data_dap <- data.frame()
 
-        for (i in distri){
+      for (i in seq_along(class)) {
+        if (i==1){
+          site_class<-  site [site$DAP_cm<class[1],]
+          site_class_number=length(site_class$DAP_cm)
+          site_all_number= length(site$DAP_cm)
+          site_class_percentage = (site_class_number/
+                                     site_all_number) *100
+          subset_data <- c(class[1],
+                           site_class_number,
+                           site_class_percentage,
+                           site_all_number)
+          data_dap <- rbind(subset_data,data_dap)
+        }
+        lower_bound <- class[i]
+        upper_bound <- class[i + 1]
+        if (is.na(upper_bound)==TRUE) {
+          subset_data <- site[site$DAP_cm >= lower_bound,]
+          site_class_number=length(subset_data$DAP_cm)
+          site_all_number= length(site$DAP_cm)
+          site_class_percentage = (site_class_number/
+                                     site_all_number) *100
+          subset_data <- c(class[i], site_class_number,
+                           site_class_percentage,
+                           site_all_number)
 
-          tag <- i
-          site_sep_distri <- site[site$Distri==i,]
-          data_dap = data.frame()
-          for (j in seq_along(class)){
-            if (j==1){
-              site_class<-  site_sep_distri [site_sep_distri$DAP<class[1],]
-              site_class_number=length(site_class$DAP)
-              site_all_number= length(site$DAP)
-              site_class_percentage = (site_class_number/
-                                         site_all_number) *100
-              subset_data <- c(class[1], tag,
-                               site_class_number,
-                               site_class_percentage,
-                               site_all_number)
-              data_dap <- rbind(subset_data,data_dap)
-
-            }
-            lower_bound <- class[j]
-            upper_bound <- class[j + 1]
-            if (is.na(upper_bound)==TRUE) {
-              subset_data <- site_sep_distri[site_sep_distri$DAP >= lower_bound,]
-              site_class_number=length(subset_data$DAP)
-              site_all_number= length(site$DAP)
-              site_class_percentage = (site_class_number/
-                                         site_all_number) *100
-              subset_data <- c(class[j], tag, site_class_number,
-                               site_class_percentage,
-                               site_all_number)
-
-            }else {
-              subset_data <- site_sep_distri[site_sep_distri$DAP >= lower_bound &
-                                               site_sep_distri$DAP < upper_bound, ]
-              site_class_number=length(subset_data$DAP)
-              site_all_number= length(site$DAP)
-              site_class_percentage = (site_class_number/
-                                         site_all_number) *100
-              subset_data <- c(paste (class[j], class[j+1], sep= "_"),
-                               tag,
-                               site_class_number,
-                               site_class_percentage,
-                               site_all_number)
-            }
-
-            data_dap <- rbind(subset_data,data_dap)
-            colnames(data_dap) <- c("Class_DAP", "Distri","Ind_number",
-                                    "Ind_percentage",
-                                    "Total_ind")
-          }
-
-          data_sep_dist <- rbind(data_dap,data_sep_dist)
-
+        }else {
+          subset_data <- site[site$DAP_cm >= lower_bound &
+                                site$DAP_cm < upper_bound, ]
+          site_class_number=length(subset_data$DAP_cm)
+          site_all_number= length(site$DAP_cm)
+          site_class_percentage = (site_class_number/
+                                     site_all_number) *100
+          subset_data <- c(paste (class[i], class[i+1], sep= "_"),
+                           site_class_number,
+                           site_class_percentage,
+                           site_all_number)
         }
 
+        data_dap <- rbind(subset_data,data_dap)
 
-        data_dap <- data_sep_dist[order(data_sep_dist$Class_DAP),]
-
+      }
+      colnames(data_dap) <- c("Class_DAP","Ind_number",
+                              "Ind_percentage",
+                              "Total_ind")
       }else{
        data_dap <- data.frame()
 
@@ -343,8 +317,8 @@ class_DBH_alt <- function (x, choice = "ind",
   }
 
 
-  if (distribution==TRUE){result <- result %>%
-    mutate(across(-c(Class_DAP, Distri), as.numeric))}else{result <- result %>%
+  if (diametre_altura==2){result <- result %>%
+    mutate(across(-c(Class_DAP), as.numeric))}else{result <- result %>%
       mutate(across(-c(Class_Alt), as.numeric))}
   return (result)
 

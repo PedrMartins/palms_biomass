@@ -9,8 +9,8 @@ Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/1
 str (Biomass_palms_archontophoenix)
 #Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
-
-class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,6,16,31,51,151))
+class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,50,150))
+class_DBH_alt (Biomass_palms_archontophoenix, class = c(0.5,1.5), dbh_alt = "dbh")
 
 
 
