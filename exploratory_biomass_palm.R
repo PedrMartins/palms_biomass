@@ -10,7 +10,7 @@ str (Biomass_palms_archontophoenix)
 #Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
 
-class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,30))
+class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,6,16,31,51,151))
 
 
 

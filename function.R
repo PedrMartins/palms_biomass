@@ -105,9 +105,7 @@ class_DBH_alt <- function (x, choice = "ind",
         data_dap <- data_sep_dist[order(data_sep_dist$Class_DAP),]
 
       }else{
-        browser()
-
-        data_dap <- data.frame()
+       data_dap <- data.frame()
 
         for (i in seq_along(class)) {
           if (i==1){
@@ -150,7 +148,7 @@ class_DBH_alt <- function (x, choice = "ind",
           data_dap <- rbind(subset_data,data_dap)
 
         }
-          colnames(data_dap) <- c("Class_DAP","Ind_number",
+          colnames(data_dap) <- c("Class_Alt","Ind_number",
                                   "Ind_percentage",
                                   "Total_ind")
 
