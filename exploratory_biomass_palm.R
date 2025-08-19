@@ -1,4 +1,5 @@
 library(readxl)
+library(dplyr)
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[3:7] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
@@ -6,7 +7,13 @@ names (Biomass_palms_archontophoenix)[3:7] <-  c("DAP_mm", "altura_cm",
                                                  "percentage_dry_biomass")
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
 str (Biomass_palms_archontophoenix)
-Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
+#Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
+
+
+class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,30))
+
+
+
 
 names (Biomass_palms_archontophoenix)
 #View (Biomass_palms_archontophoenix)
