@@ -3,8 +3,12 @@ Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[3:7] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
                                                  "biomass_seca_g",
-                                                 "peso_seco_%")
+                                                 "percentage_dry_biomass")
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
+str (Biomass_palms_archontophoenix)
+Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
+
+names (Biomass_palms_archontophoenix)
 #View (Biomass_palms_archontophoenix)
 #Biomass_palms_archontophoenix$DAP_cm < 7
 
@@ -15,6 +19,7 @@ bio_dap_2 <- lm (biomassa_fresca_g~ DAP_cm * I(DAP_cm^2), data =
 coefficients <- coef(bio_dap_2)
 summary(bio_dap_2)
 anova (bio_dap,bio_dap_2)
+
 
 
 plot (biomassa_fresca_g~DAP_cm, data =
