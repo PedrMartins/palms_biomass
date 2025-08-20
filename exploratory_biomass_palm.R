@@ -18,7 +18,7 @@ class_DBH_alt (Biomass_palms_archontophoenix, dbh_alt = "dbh",
                choice = "bio")
 
 class_DBH_alt (Biomass_palms_archontophoenix,
-               class = c(0.5,1,5))
+               class = 8)
 
 
 
