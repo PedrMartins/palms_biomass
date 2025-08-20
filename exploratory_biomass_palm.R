@@ -1,5 +1,6 @@
 library(readxl)
 library(dplyr)
+source("function.R")
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[3:7] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
@@ -10,7 +11,14 @@ str (Biomass_palms_archontophoenix)
 #Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
 class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,50,150))
-class_DBH_alt (Biomass_palms_archontophoenix, class = c(0.5,1.5), dbh_alt = "dbh")
+class_DBH_alt (Biomass_palms_archontophoenix, class = c(1.5, 5), dbh_alt = "dbh")
+
+class_DBH_alt (Biomass_palms_archontophoenix, dbh_alt = "dbh",
+               class = c(0.5,1,5),
+               choice = "bio")
+
+class_DBH_alt (Biomass_palms_archontophoenix,
+               class = c(0.5,1,5))
 
 
 

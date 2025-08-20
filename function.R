@@ -137,98 +137,90 @@ class_DBH_alt <- function (x, choice = "ind",
 
   if (choice==2){
     if (length(class)==1) {
-      if (distribution==TRUE){
-        distri <- c("Temp", "Trop")
-        data_sep_dist <- data.frame()
-        for (i in distri){
-          tag <- i
-          site_sep_distri <- site[site$Distri==i,]
-          site_class<-  site_sep_distri [site_sep_distri$DAP>class,]
-          site_class_biomass=sum(site_class$biom)
-          site_all_biomass= sum(site$biom)
-          site_biomass_percentage = (site_class_biomass/
-                                       site_all_biomass) *100
-          data_biomass<- data.frame("Class_DAP"=class,
-                                    "Distri"= tag,
-                                    "Biomass_ab"=site_class_biomass,
-                                    "Biomass_percentage"=site_biomass_percentage,
-                                    "Total_ind"=site_all_biomass)
+      if (diametre_altura==2){
+        site_class<-  site [site$DAP_cm<class,]
+        site_class_number=sum (site_class$biomassa_fresca_g,
+                                na.rm = TRUE)
+        #site_class_number=sum (site_class$biomass_seca_g, na.rm = TRUE) quando tiver o fator de correção
+        site_all_number= sum(site$biomassa_fresca_g,
+                             na.rm = TRUE)
+        #site_class_number=sum (site$biomass_seca_g, na.rm = TRUE) quando tiver o fator de correção
+        site_class_percentage = (site_class_number/
+                                   site_all_number) *100
+        data_dap<- data.frame("Class_DAP_cm"=class,
+                              "Biomass"=site_class_number,
+                              "Biomass_percentage"=site_class_percentage,
+                              "Total_biomass"=site_all_number)
 
-          data_sep_dist <- rbind(data_biomass,data_sep_dist)
-        }
-        data_biomass <- data_sep_dist
+        data_biomass <- data_dap
       }else {
-        clado <- c("Gim", "Ang")
-        site$Filo[site$Filo %in% c("Eud", "Mag", "Palm")] <- "Ang"
-        data_sep_filo <- data.frame()
+        browser()
 
-        for (i in clado){
-          tag <- i
-          site_sep_filo <- site[site$Filo==i,]
-          site_class<-  site_sep_filo [site_sep_filo$DAP>class,]
-          site_class_biomass=sum(site_class$biom)
-          site_all_biomass= sum(site$biom)
-          site_biomass_percentage = (site_class_biomass/
-                                       site_all_biomass) *100
-          data_biomass<- data.frame("Class_DAP"=class,
-                                    "Filo"= tag,
-                                    "Biomass_ab"=site_class_biomass,
-                                    "Biomass_percentage"=site_biomass_percentage,
-                                    "Total_ind"=site_all_biomass)
+        site_class<-  site [site$altura_cm<class,]
+        site_class_number=sum (site_class$biomassa_fresca_g,
+                               na.rm = TRUE)
+        #site_class_number=sum (site_class$biomass_seca_g, na.rm = TRUE) quando tiver o fator de correção
+        site_all_number= sum(site$biomassa_fresca_g,
+                             na.rm = TRUE)
+        #site_class_number=sum (site$biomass_seca_g, na.rm = TRUE) quando tiver o fator de correção
+        site_class_percentage = (site_class_number/
+                                   site_all_number) *100
+        data_dap<- data.frame("Class_Alt_cm"=class,
+                              "Biomass"=site_class_number,
+                              "Biomass_percentage"=site_class_percentage,
+                              "Total_biomass"=site_all_number)
 
-          data_sep_filo <- rbind(data_biomass,data_sep_filo)
-        }
-        data_biomass <- data_sep_filo
+        data_biomass <- data_dap
       }
     } else {
-      if(distribution==TRUE){
-        distri <- c("Temp", "Trop")
-        data_sep_dist <- data.frame()
-        for (i in distri){
-          tag <- i
-          site_sep_distri <- site[site$Distri==i,]
-          data_biomass <- data.frame()
-          for (j in seq_along(class)){
-            if (j==1){
-              site_class<-  site_sep_distri [site_sep_distri$DAP<class [1],]
-              site_class_biomass=sum(site_class$biom)
-              site_all_biomass= sum(site$biom)
+      if(diametre_altura==2){
+        data_biomass <- data.frame()
+          for (i in seq_along(class)){
+            if (i==1){
+              site_class<-  site [site$DAP_cm<class [1],]
+              site_class_biomass=sum(site_class$biomassa_fresca_g, na.rm = TRUE)
+              #site_class_biomass=sum(site_class$biomass_seca_g, na.rm = TRUE)
+              site_all_biomass= sum(site$biomassa_fresca_g, na.rm = TRUE)
+              #site_all_biomass= sum(site$biomass_seca_g, na.rm = TRUE)
               site_biomass_percentage = (site_class_biomass/
                                            site_all_biomass) *100
 
 
-              subset_data_bio <- c(class[1], tag,
+              subset_data_bio <- c(class[1],
                                    site_class_biomass,
                                    site_biomass_percentage,
                                    site_all_biomass)
               data_biomass <- rbind(subset_data_bio,data_biomass)
             }
-            lower_bound <- class[j]
-            upper_bound <- class[j + 1]
+            lower_bound <- class[i]
+            upper_bound <- class[i + 1]
             if (is.na(upper_bound)==TRUE) {
-              subset_data <- site_sep_distri[site_sep_distri$DAP >= lower_bound,]
-              site_class_biomass=sum(subset_data$biom)
-              site_all_biomass= sum(site$biom)
+              subset_data <- site[site$DAP_cm >= lower_bound,]
+              site_class_biomass=sum(subset_data$biomassa_fresca_g, na.rm = TRUE)
+              site_all_biomass= sum(site$biomassa_fresca_g, na.rm = TRUE)
+              #site_class_biomass=sum(subset_data$biomass_seca_g, na.rm = TRUE)
+              #site_all_biomass= sum(site$biomass_seca_g, na.rm = TRUE)
               site_biomass_percentage = (site_class_biomass/
                                            site_all_biomass) *100
 
 
-              subset_data_bio <- c(class[j], tag,
+              subset_data_bio <- c(class[i],
                                    site_class_biomass,
                                    site_biomass_percentage,
                                    site_all_biomass)
 
             }else {
-              subset_data <- site_sep_distri[site_sep_distri$DAP >= lower_bound &
-                                               site_sep_distri$DAP < upper_bound, ]
-              site_class_biomass=sum(subset_data$biom)
-              site_all_biomass= sum(site$biom)
+              subset_data <- site[site$DAP_cm >= lower_bound &
+                                               site$DAP_cm < upper_bound, ]
+              site_class_biomass=sum(subset_data$biomassa_fresca_g, na.rm = TRUE)
+              site_all_biomass= sum(site$biomassa_fresca_g, na.rm = TRUE)
+             #site_class_biomass=sum(subset_data$biomass_seca_g, na.rm = TRUE)
+             #site_all_biomass= sum(site$biomass_seca_g, na.rm = TRUE)
               site_biomass_percentage = (site_class_biomass/
                                            site_all_biomass) *100
 
 
-              subset_data_bio <- c(paste (class[j], class[j+1], sep= "_"),
-                                   tag,
+              subset_data_bio <- c(paste (class[i], class[i+1], sep= "_"),
                                    site_class_biomass,
                                    site_biomass_percentage,
                                    site_all_biomass)
@@ -236,14 +228,12 @@ class_DBH_alt <- function (x, choice = "ind",
             }
             data_biomass <- rbind(subset_data_bio,data_biomass)
           }
-          colnames(data_biomass) <- c("Class_DAP",
-                                      "Distri",
+          colnames(data_biomass) <- c("Class_DAP_cm",
+
                                       "Biomass_ab",
                                       "Biomass_percentage",
                                       "Total_ind")
-          data_sep_dist <- rbind(data_biomass,data_sep_dist)
-        }
-        data_biomass <- data_sep_dist[order(data_sep_dist$Class_DAP),]
+
       }else{
 
         clado <- c("Gim", "Ang")
@@ -318,8 +308,8 @@ class_DBH_alt <- function (x, choice = "ind",
 
 
   if (diametre_altura==2){result <- result %>%
-    mutate(across(-c(Class_DAP), as.numeric))}else{result <- result %>%
-      mutate(across(-c(Class_Alt), as.numeric))}
+    mutate(across(-c(Class_DAP_cm), as.numeric))}else{result <- result %>%
+      mutate(across(-c(Class_Alt_cm), as.numeric))}
   return (result)
 
 }
