@@ -13,6 +13,13 @@ Biomass_palms_archontophoenix$Transecto <-  paste (Biomass_palms_archontophoenix
                                                    sep="_")
 
 
+ind_par <-  Biomass_palms_archontophoenix %>%
+  count(Parcela)
+mean(ind_par$n)
+sd (ind_par$n)
+
+barplot(ind_par$n~ind_par$Parcela, width=1)
+
 fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
      na.rm = TRUE)
 sd (Biomass_palms_archontophoenix$percentage_dry_biomass,
