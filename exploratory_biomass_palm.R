@@ -2,19 +2,32 @@ library(readxl)
 library(dplyr)
 source("function.R")
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
-names (Biomass_palms_archontophoenix)[3:7] <-  c("DAP_mm", "altura_cm",
+names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
                                                  "biomass_seca_g",
                                                  "percentage_dry_biomass")
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
 str (Biomass_palms_archontophoenix)
+Biomass_palms_archontophoenix$Transecto <-  paste (Biomass_palms_archontophoenix$Transecto,
+                                                   Biomass_palms_archontophoenix$Parcela,
+                                                   sep="_")
+
+
+fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
+     na.rm = TRUE)
+sd (Biomass_palms_archontophoenix$percentage_dry_biomass,
+    na.rm= TRUE)
+
+Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
+  Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
+
 #Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
-class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,50,150))
+x <- class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,50,150))
 class_DBH_alt (Biomass_palms_archontophoenix, class = c(1.5, 5), dbh_alt = "dbh")
 
-class_DBH_alt (Biomass_palms_archontophoenix, dbh_alt = "dbh",
-               class = c(0.5,1,5),
+y <- class_DBH_alt (Biomass_palms_archontophoenix, dbh_alt = "alt",
+               class = c(5, 100),
                choice = "bio")
 
 class_DBH_alt (Biomass_palms_archontophoenix,
@@ -39,6 +52,16 @@ anova (bio_dap,bio_dap_2)
 
 plot (biomassa_fresca_g~DAP_cm, data =
         Biomass_palms_archontophoenix)
+
+barplot(x$Ind_percentage)
+barplot(y$Class_Alt_cm)
+
+boxplot(biomass_seca_g_estimada~Transecto,
+        data=Biomass_palms_archontophoenix, log ="y")
+barplot(biomassa_fresca_g~Parcela,
+        data=Biomass_palms_archontophoenix, log ="y")
+
+
 dev.off()
 par (mfrow =c(2,2))
 plot (bio_dap_2)
