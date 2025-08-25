@@ -36,12 +36,13 @@ x <- class_DBH_alt (Biomass_palms_archontophoenix, class = c(5,15,50,150))
 class_DBH_alt (Biomass_palms_archontophoenix, class = c(1.5, 5), dbh_alt = "dbh")
 
 y <- class_DBH_alt (Biomass_palms_archontophoenix, dbh_alt = "alt",
-               class = c(5, 100),
+               class = c(5,15,30,50,150,200),
                choice = "bio")
 
 class_DBH_alt (Biomass_palms_archontophoenix,
                class = 8)
 
+barplot(y$Biomass_ab)
 
 
 
