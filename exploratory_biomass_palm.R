@@ -8,17 +8,19 @@ names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
                                                  "percentage_dry_biomass")
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
 str (Biomass_palms_archontophoenix)
-Biomass_palms_archontophoenix$Transecto <-  paste (Biomass_palms_archontophoenix$Transecto,
+Biomass_palms_archontophoenix$Transecto_Parcela <-  paste (Biomass_palms_archontophoenix$Transecto,
                                                    Biomass_palms_archontophoenix$Parcela,
                                                    sep="_")
 
 
 ind_par <-  Biomass_palms_archontophoenix %>%
-  count(Parcela)
+  count(Transecto)
+View (ind_par)
 mean(ind_par$n)
 sd (ind_par$n)
+x <- round(ind_par$biomassa_fresca_g,1)
 
-barplot(ind_par$n~ind_par$Parcela, width=1)
+barplot(ind_par$n~ind_par$Transecto, width=1)
 
 fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
      na.rm = TRUE)
