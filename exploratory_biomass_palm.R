@@ -1,34 +1,42 @@
 library(readxl)
 library(dplyr)
 source("function.R")
+library(mgcv)
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
                                                  "biomass_seca_g",
                                                  "percentage_dry_biomass")
+
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
-str (Biomass_palms_archontophoenix)
 Biomass_palms_archontophoenix$Transecto_Parcela <-  paste (Biomass_palms_archontophoenix$Transecto,
                                                    Biomass_palms_archontophoenix$Parcela,
                                                    sep="_")
 
-
-ind_par <-  Biomass_palms_archontophoenix %>%
-  count(Transecto)
-View (ind_par)
-mean(ind_par$n)
-sd (ind_par$n)
-x <- round(ind_par$biomassa_fresca_g,1)
-
-barplot(ind_par$n~ind_par$Transecto, width=1)
-
 fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
-     na.rm = TRUE)
-sd (Biomass_palms_archontophoenix$percentage_dry_biomass,
-    na.rm= TRUE)
+                          na.rm = TRUE)
 
 Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
+
+shapiro.test(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
+
+qqnorm(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
+qqline(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
+
+dev.off()
+
+biomass_seca <- Biomass_palms_archontophoenix %>%
+  group_by(Parcela) %>%
+  summarise(total_biomass_seca_g = sum(biomass_seca_g_estimada,
+                                na.rm = TRUE))
+
+barplot(ind_par_transce$n~ind_par_transce$Transecto,
+        ylim = c(0,800), width=1)
+
+barplot(ind_par_parcela$n~ind_par_parcela$Parcela, width=1)
+
+barplot(biomass_seca$Transecto~biomass_seca$total_biomass_seca_g)
 
 #Biomass_palms_archontophoenix [Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
@@ -50,13 +58,27 @@ names (Biomass_palms_archontophoenix)
 #View (Biomass_palms_archontophoenix)
 #Biomass_palms_archontophoenix$DAP_cm < 7
 
-bio_dap <- lm (biomassa_fresca_g~DAP_cm, data =
+head (Biomass_palms_archontophoenix)
+
+plot (biomass_seca_g_estimada~DAP_cm,
+      data =Biomass_palms_archontophoenix)
+
+barplot (biomass_seca_count$n)
+
+
+bio_dap <- lm (biomass_seca_g_estimada~altura_cm+I(DAP_cm^2) , data =
                  Biomass_palms_archontophoenix)
-bio_dap_2 <- lm (biomassa_fresca_g~ DAP_cm * I(DAP_cm^2), data =
+summary(bio_dap)
+abline (bio_dap)
+
+
+bio_dap_2 <- glm (biomassa_fresca_g~ DAP_cm * I(DAP_cm^2), data =
                  Biomass_palms_archontophoenix)
 coefficients <- coef(bio_dap_2)
 summary(bio_dap_2)
 anova (bio_dap,bio_dap_2)
+
+
 
 
 
