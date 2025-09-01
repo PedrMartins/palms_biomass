@@ -68,6 +68,7 @@ barplot (biomass_seca_count$n)
 
 bio_dap <- lm (biomass_seca_g_estimada~altura_cm+I(DAP_cm^2) , data =
                  Biomass_palms_archontophoenix)
+typeof(bio_dap)
 summary(bio_dap)
 abline (bio_dap)
 
