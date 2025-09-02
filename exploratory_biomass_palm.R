@@ -19,11 +19,17 @@ fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass
 Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
 
-shapiro.test(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
 
-qqnorm(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
-qqline(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
 
+shapiro.test(log(Biomass_palms_archontophoenix$biomass_seca_g_estimada))
+
+qqnorm(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
+qqline(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
+View (Biomass_palms_archontophoenix)
+plot (biomass_seca_g_estimada~altura_cm
+  ,data=Biomass_palms_archontophoenix)
+barplot(biomass_seca_g_estimada,
+        data = Biomass_palms_archontophoenix)
 dev.off()
 
 biomass_seca <- Biomass_palms_archontophoenix %>%
