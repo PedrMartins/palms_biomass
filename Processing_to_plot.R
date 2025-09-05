@@ -8,5 +8,8 @@ biomass_seca_count <- Biomass_palms_archontophoenix %>%
   group_by(biomass_seca_g_estimada)%>%
   count (biomass_seca_g_estimada)
 
-View(biomass_seca_count)
+biomass_seca <- Biomass_palms_archontophoenix %>%
+  group_by(Parcela) %>%
+  summarise(total_biomass_seca_g = sum(biomass_seca_g_estimada,
+                                       na.rm = TRUE))
 
