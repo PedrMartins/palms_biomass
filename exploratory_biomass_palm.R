@@ -25,10 +25,14 @@ Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
 
 
+
 #######exploratoty analyses######
+
+
+
+
+#########teste de normalidade ########
 source ("Processing_to_plot.R")
-
-
 shapiro.test(log(Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 
 qqnorm(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
@@ -41,6 +45,7 @@ plot (biomass_seca_g_estimada~altura_cm
 
 barplot(biomass_seca_g_estimada,
         data = Biomass_palms_archontophoenix)
+
 
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
