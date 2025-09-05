@@ -20,7 +20,7 @@ Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
 
 
-
+#########teste de normalidade ########
 shapiro.test(log(Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 
 qqnorm(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
@@ -32,6 +32,8 @@ barplot(biomass_seca_g_estimada,
         data = Biomass_palms_archontophoenix)
 dev.off()
 
+
+############
 biomass_seca <- Biomass_palms_archontophoenix %>%
   group_by(Parcela) %>%
   summarise(total_biomass_seca_g = sum(biomass_seca_g_estimada,
