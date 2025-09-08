@@ -24,7 +24,9 @@ fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass
 Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
 
-
+View (Biomass_palms_archontophoenix [c(294,
+                                       444,
+                                       445),]) #dados influentes no modelo
 
 #######exploratoty analyses######
 
@@ -37,10 +39,6 @@ shapiro.test(log(Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 
 qqnorm(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 qqline(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
-
-
-plot (biomass_seca_g_estimada~altura_cm
-  ,data=Biomass_palms_archontophoenix)
 
 
 barplot(biomass_seca_g_estimada,
@@ -61,18 +59,27 @@ barplot(biomass_seca$Transecto~biomass_seca$total_biomass_seca_g)
 #########linear analyses#################
 #diagnostico do modelo
 
-lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm*DAP_cm +
-                     I(altura_cm^2)* I(DAP_cm^2) , data =
-                 Biomass_palms_archontophoenix)
+lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm * DAP_cm* I(DAP_cm^2) * I(altura_cm^2)
+                   , data =
+                     Biomass_palms_archontophoenix)
 
-lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm*DAP_cm +
-                       I(altura_cm^2)* I(DAP_cm^2), data =
+
+lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
+                       altura_cm:I(DAP_cm^2) +
+                       DAP_cm:I(DAP_cm^2)
+                     , data =
                        Biomass_palms_archontophoenix)
+
+par (mfrow = c(2,2))
+plot (lm_bio_full)
+plot (lm_bio_simple)
+str (lm_bio_simple)
+
 
 summary(lm_bio_full)
 summary(lm_bio_simple)
 
-anova(lm_bio_full~lm_bio_simple)
+anova(lm_bio_full,lm_bio_simple)
 
 
 #####teste#########
@@ -91,10 +98,12 @@ abline (v=mean(Biomass_palms_archontophoenix$altura_cm,
 alt_dap <- lm (DAP_cm~altura_cm, data =
                  Biomass_palms_archontophoenix)
 summary(alt_dap)
-plot (DAP_cm~altura_cm, data =
+plot (biomass_seca_g_estimada~altura_cm + DAP_cm, data =
         Biomass_palms_archontophoenix)
 abline (alt_dap)
 
+plot (Biomass_palms_archontophoenix [, -c(1:3,6:12)])
+names (Biomass_palms_archontophoenix)
 
 
 boxplot(biomass_seca_g_estimada~Transecto,
