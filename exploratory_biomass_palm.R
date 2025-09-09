@@ -28,6 +28,8 @@ View (Biomass_palms_archontophoenix [c(294,
                                        444,
                                        445),]) #dados influentes no modelo
 
+
+
 #######exploratoty analyses######
 
 
@@ -70,6 +72,42 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                      , data =
                        Biomass_palms_archontophoenix)
 
+lm_bio_simple_Without_Altsq_Interaction <- lm (biomass_seca_g_estimada~ altura_cm + I(altura_cm^2) +
+                       altura_cm:I(DAP_cm^2) +
+                       DAP_cm:I(DAP_cm^2)
+                     , data =
+                       Biomass_palms_archontophoenix)
+
+lm_bio_simple_Without_Altsq <- lm (biomass_seca_g_estimada~ altura_cm  +
+                                     altura_cm:I(DAP_cm^2) +
+                                     DAP_cm:I(DAP_cm^2)
+                                   , data =
+                                     Biomass_palms_archontophoenix)
+
+lm_bio_simple_Without_dapsqint <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2)  +
+                                     DAP_cm:I(DAP_cm^2)
+                                   , data =
+                                     Biomass_palms_archontophoenix)
+
+lm_bio_simple_Without_dapsqintDap <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
+                                     altura_cm:I(DAP_cm^2)
+                                   , data =
+                                     Biomass_palms_archontophoenix)
+
+lm_bio_simple_Without_dapsqintDap_and_altinterca <- lm (biomass_seca_g_estimada~ altura_cm + I(altura_cm^2) +
+                                           altura_cm:I(DAP_cm^2)
+                                         , data =
+                                           Biomass_palms_archontophoenix)
+lm_bio_simple_Without_dapsqint_and_alrsq <- lm (biomass_seca_g_estimada~ altura_cm+
+                                        DAP_cm:I(DAP_cm^2)
+                                      , data =
+                                        Biomass_palms_archontophoenix)
+lm_bio_hiper_simple <- lm (biomass_seca_g_estimada~ altura_cm+ I(DAP_cm^2)
+                                                , data =
+                                                  Biomass_palms_archontophoenix)
+
+
+
 par (mfrow = c(2,2))
 plot (lm_bio_full)
 plot (lm_bio_simple)
@@ -78,8 +116,19 @@ str (lm_bio_simple)
 
 summary(lm_bio_full)
 summary(lm_bio_simple)
+summary (lm_bio_simple_Without_Altsq_Interaction)
+summary (lm_bio_simple_Without_Altsq)
 
 anova(lm_bio_full,lm_bio_simple)
+
+AIC (lm_bio_simple,
+     lm_bio_simple_Without_Altsq_Interaction,
+     lm_bio_simple_Without_Altsq,
+     lm_bio_simple_Without_dapsqint,
+     lm_bio_simple_Without_dapsqintDap,
+     lm_bio_simple_Without_dapsqintDap_and_altinterca,
+     lm_bio_simple_Without_dapsqint_and_alrsq,
+     lm_bio_hiper_simple)
 
 
 #####teste#########
@@ -113,3 +162,6 @@ barplot(biomassa_fresca_g~Parcela,
 
 #######
 
+lm1 <- lm(Fertility ~ . , data = swiss)
+summary(lm1)
+AIC (lm1)
