@@ -1,6 +1,7 @@
 library(readxl)
 library(dplyr)
 library(mgcv)
+library(vegan)
 source("function.R")
 
 # function class_DBH_alt (x, choice = "ind",
@@ -24,9 +25,9 @@ fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass
 Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
 
-View (Biomass_palms_archontophoenix [c(294,
-                                       444,
-                                       445),]) #dados influentes no modelo
+# View (Biomass_palms_archontophoenix [c(294,
+#                                        444,
+#                                        445),]) #dados influentes no modelo
 
 
 
@@ -37,15 +38,10 @@ View (Biomass_palms_archontophoenix [c(294,
 
 #########teste de normalidade ########
 source ("Processing_to_plot.R")
-shapiro.test(log(Biomass_palms_archontophoenix$biomass_seca_g_estimada))
-
-qqnorm(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
-qqline(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
-
+shapiro.test()
 
 barplot(biomass_seca_g_estimada,
         data = Biomass_palms_archontophoenix)
-
 
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
@@ -54,12 +50,18 @@ barplot(ind_par_parcela$n~ind_par_parcela$Parcela, width=1)
 
 barplot(biomass_seca$Transecto~biomass_seca$total_biomass_seca_g)
 
+
+
+log (Biomass_palms_archontophoenix[,13]+1)
 # Biomass_palms_archontophoenix [
 #   Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
 
 #########linear analyses#################
 #diagnostico do modelo
+
+plot (Biomass_palms_archontophoenix [,c(5,11,13)])
+
 
 lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm * DAP_cm* I(DAP_cm^2) * I(altura_cm^2)
                    , data =
@@ -72,96 +74,23 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                      , data =
                        Biomass_palms_archontophoenix)
 
-lm_bio_simple_Without_Altsq_Interaction <- lm (biomass_seca_g_estimada~ altura_cm + I(altura_cm^2) +
-                       altura_cm:I(DAP_cm^2) +
-                       DAP_cm:I(DAP_cm^2)
-                     , data =
-                       Biomass_palms_archontophoenix)
+shapiro.test(lm_bio_full$residuals)
 
-lm_bio_simple_Without_Altsq <- lm (biomass_seca_g_estimada~ altura_cm  +
-                                     altura_cm:I(DAP_cm^2) +
-                                     DAP_cm:I(DAP_cm^2)
-                                   , data =
-                                     Biomass_palms_archontophoenix)
-
-lm_bio_simple_Without_dapsqint <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2)  +
-                                     DAP_cm:I(DAP_cm^2)
-                                   , data =
-                                     Biomass_palms_archontophoenix)
-
-lm_bio_simple_Without_dapsqintDap <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
-                                     altura_cm:I(DAP_cm^2)
-                                   , data =
-                                     Biomass_palms_archontophoenix)
-
-lm_bio_simple_Without_dapsqintDap_and_altinterca <- lm (biomass_seca_g_estimada~ altura_cm + I(altura_cm^2) +
-                                           altura_cm:I(DAP_cm^2)
-                                         , data =
-                                           Biomass_palms_archontophoenix)
-lm_bio_simple_Without_dapsqint_and_alrsq <- lm (biomass_seca_g_estimada~ altura_cm+
-                                        DAP_cm:I(DAP_cm^2)
-                                      , data =
-                                        Biomass_palms_archontophoenix)
-lm_bio_hiper_simple <- lm (biomass_seca_g_estimada~ altura_cm+ I(DAP_cm^2)
-                                                , data =
-                                                  Biomass_palms_archontophoenix)
-
-
+#resíduos sem normalidade
 
 par (mfrow = c(2,2))
 plot (lm_bio_full)
 plot (lm_bio_simple)
-str (lm_bio_simple)
 
+boxplot (log (biomass_seca_g_estimada)~Transecto,
+         data = Biomass_palms_archontophoenix)
+boxplot.stats(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 
 summary(lm_bio_full)
 summary(lm_bio_simple)
-summary (lm_bio_simple_Without_Altsq_Interaction)
-summary (lm_bio_simple_Without_Altsq)
 
 anova(lm_bio_full,lm_bio_simple)
 
 AIC (lm_bio_simple,
-     lm_bio_simple_Without_Altsq_Interaction,
-     lm_bio_simple_Without_Altsq,
-     lm_bio_simple_Without_dapsqint,
-     lm_bio_simple_Without_dapsqintDap,
-     lm_bio_simple_Without_dapsqintDap_and_altinterca,
-     lm_bio_simple_Without_dapsqint_and_alrsq,
-     lm_bio_hiper_simple)
+     lm_bio_full)
 
-
-#####teste#########
-bio_alt <- lm (biomassa_fresca_g~altura_cm, data =
-      Biomass_palms_archontophoenix)
-summary(bio_alt)
-plot (biomassa_fresca_g~altura_cm, data =
-        Biomass_palms_archontophoenix)
-abline (bio_alt)
-abline (h=mean(Biomass_palms_archontophoenix$biomassa_fresca_g,
-             na.rm = TRUE))
-abline (v=mean(Biomass_palms_archontophoenix$altura_cm,
-               na.rm = TRUE))
-
-
-alt_dap <- lm (DAP_cm~altura_cm, data =
-                 Biomass_palms_archontophoenix)
-summary(alt_dap)
-plot (biomass_seca_g_estimada~altura_cm + DAP_cm, data =
-        Biomass_palms_archontophoenix)
-abline (alt_dap)
-
-plot (Biomass_palms_archontophoenix [, -c(1:3,6:12)])
-names (Biomass_palms_archontophoenix)
-
-
-boxplot(biomass_seca_g_estimada~Transecto,
-        data=Biomass_palms_archontophoenix, log ="y")
-barplot(biomassa_fresca_g~Parcela,
-        data=Biomass_palms_archontophoenix, log ="y")
-
-#######
-
-lm1 <- lm(Fertility ~ . , data = swiss)
-summary(lm1)
-AIC (lm1)
