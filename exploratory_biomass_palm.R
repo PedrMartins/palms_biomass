@@ -33,12 +33,37 @@ Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
 
 #######exploratoty analyses######
 
+anova (aov (biomass_seca_g_estimada ~ Transecto + Parcela,
+     data = Biomass_palms_archontophoenix))
 
+anova (aov (biomass_seca_g_estimada ~ Parcela,
+            data = Biomass_palms_archontophoenix))
+anova (aov (biomass_seca_g_estimada ~ Transecto,
+            data = Biomass_palms_archontophoenix))
 
+par (las = 1, bty = "n")
+down_to_top <- range(
+  log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
+      na.rm = TRUE)
+boxplot (log (biomass_seca_g_estimada)~ Parcela,
+         data= Biomass_palms_archontophoenix,
+         ylim = c(down_to_top[1] -1.5,
+                  down_to_top [2] + 1.5),
+         col= c(rep ("lightgreen",10), rep("darkgreen",9)),
+         pch = "*", xlab = "Parcela",
+         ylab = "log Dry Biomass (g)")
+
+legend("topleft" #fun��o adiciona um texto ao gr�fico,
+       #arg 1� define a localiza��o, usa-se a fun��o locator para
+       #adicionar de uma forma interativa
+       ,c("Transecto 2","Transecto 3") #texto a ser escrito
+       ,col=c ("lightgreen", "darkgreen")
+       ,cex=.5		#tamanho da fonte
+       , pch=c(15,15)
+       ,bty = "n") #tipo da fonte
 
 #########teste de normalidade ########
 source ("Processing_to_plot.R")
-shapiro.test()
 
 barplot(biomass_seca_g_estimada,
         data = Biomass_palms_archontophoenix)
@@ -46,13 +71,15 @@ barplot(biomass_seca_g_estimada,
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
 
-barplot(ind_par_parcela$n~ind_par_parcela$Parcela, width=1)
+barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
+        ylab =" Indivíduos", xlab = "Parcela",
+        ylim= c(0,250))
 
-barplot(biomass_seca$Transecto~biomass_seca$total_biomass_seca_g)
 
+barplot(log (biomass_seca$total_biomass_seca_g),
+        col = c(rep("lightgreen", 10),rep ( "darkgreen",9)),
+        )
 
-
-log (Biomass_palms_archontophoenix[,13]+1)
 # Biomass_palms_archontophoenix [
 #   Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
 
