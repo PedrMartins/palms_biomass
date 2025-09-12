@@ -90,7 +90,9 @@ barplot(log (biomass_seca$total_biomass_seca_g),
 plot (Biomass_palms_archontophoenix [,c(5,11,13)])
 
 
-lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm * DAP_cm* I(DAP_cm^2) * I(altura_cm^2)
+lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm
+                   * DAP_cm* I(DAP_cm^2)
+                   * I(altura_cm^2)
                    , data =
                      Biomass_palms_archontophoenix)
 
@@ -100,7 +102,13 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                        DAP_cm:I(DAP_cm^2)
                      , data =
                        Biomass_palms_archontophoenix)
+lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
+                       Biomass_palms_archontophoenix) #melhor explicação biológico
+summary(lm_bio_simple)
+par (mfrow = c(2,2))
+plot (lm_bio_simple)
 
+plot (data =)
 shapiro.test(lm_bio_full$residuals)
 
 #resíduos sem normalidade
@@ -109,7 +117,7 @@ par (mfrow = c(2,2))
 plot (lm_bio_full)
 plot (lm_bio_simple)
 
-boxplot (log (biomass_seca_g_estimada)~Transecto,
+boxplot (log (biomass_seca_g_estimada+1)~Transecto,
          data = Biomass_palms_archontophoenix)
 boxplot.stats(log (Biomass_palms_archontophoenix$biomass_seca_g_estimada))
 
