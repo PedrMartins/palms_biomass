@@ -269,10 +269,10 @@ class_DBH_alt <- function (x, choice = "ind",
           }else {
             subset_data <- site[site$altura_cm >= lower_bound &
                                   site$altura_cm < upper_bound, ]
-            site_class_biomass=sum(subset_data$biomassa_fresca_g, na.rm = TRUE)
-            site_all_biomass= sum(site$biomassa_fresca_g, na.rm = TRUE)
-            #site_class_biomass=sum(subset_data$biomass_seca_g_estimada, na.rm = TRUE)
-            #site_all_biomass= sum(site$biomass_seca_g_estimada, na.rm = TRUE)
+            # site_class_biomass=sum(subset_data$biomassa_fresca_g, na.rm = TRUE)
+            # site_all_biomass= sum(site$biomassa_fresca_g, na.rm = TRUE)
+            site_class_biomass=sum(subset_data$biomass_seca_g_estimada, na.rm = TRUE)
+            site_all_biomass= sum(site$biomass_seca_g_estimada, na.rm = TRUE)
             site_biomass_percentage = (site_class_biomass/
                                          site_all_biomass) *100
 

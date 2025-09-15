@@ -65,9 +65,6 @@ legend("topleft" #fun��o adiciona um texto ao gr�fico,
 #########teste de normalidade ########
 source ("Processing_to_plot.R")
 
-barplot(biomass_seca_g_estimada,
-        data = Biomass_palms_archontophoenix)
-
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
 
@@ -129,3 +126,24 @@ anova(lm_bio_full,lm_bio_simple)
 AIC (lm_bio_simple,
      lm_bio_full)
 
+
+#########Classes alt e DBH###########
+
+Biomass_by_alt_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
+                 class = c(5,15,30,50,150),dbh_alt="alt",
+                 distribution = FALSE)
+
+Biomass_by_dbh_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
+                 class = c(1,3,5,7),dbh_alt="dbh",
+                 distribution = FALSE)
+
+
+barplot(Biomass_by_alt_class$Biomass_percentage,
+        col = "lightgreen", ylim = c(0,50), ylab="Biomass (%)",
+        xlab= "Alt Classes"
+        )
+
+
+class(x)
+str (x)
+#####################################
