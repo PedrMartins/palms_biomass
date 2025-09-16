@@ -42,10 +42,12 @@ anova (aov (biomass_seca_g_estimada ~ Transecto,
             data = Biomass_palms_archontophoenix))
 
 par (las = 1, bty = "n")
+
 down_to_top <- range(
   log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
       na.rm = TRUE)
-boxplot (log (biomass_seca_g_estimada)~ Parcela,
+
+boxplot (log (biomass_seca_g_estimada )~ Parcela,
          data= Biomass_palms_archontophoenix,
          ylim = c(down_to_top[1] -1.5,
                   down_to_top [2] + 1.5),
@@ -129,20 +131,42 @@ AIC (lm_bio_simple,
 
 #########Classes alt e DBH###########
 
+
 Biomass_by_alt_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
                  class = c(5,15,30,50,150),dbh_alt="alt",
                  distribution = FALSE)
 
-Biomass_by_dbh_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
-                 class = c(1,3,5,7),dbh_alt="dbh",
-                 distribution = FALSE)
+Biomass_by_alt_class$Class_Alt_cm <- factor(Biomass_by_alt_class$Class_Alt_cm,
+       levels = c(Biomass_by_alt_class$Class_Alt_cm))
+
+Biomass_by_alt_class <- Biomass_by_alt_class[order(Biomass_by_alt_class$Class_Alt_cm
+                                                   , decreasing = TRUE), ]
 
 
 barplot(Biomass_by_alt_class$Biomass_percentage,
         col = "lightgreen", ylim = c(0,50), ylab="Biomass (%)",
-        xlab= "Alt Classes"
+        xlab= "Alt Classes cm"
         )
+mtext(c ("5","5-15",
+         "15-30","30-50",
+         "50-150","150"), side= 1,
+      at = c(.75,1.90,3.15,4.25,5.5,6.75), cex = 0.75)
 
+Biomass_by_dbh_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
+                                    class = c(1,3,5,7),dbh_alt="dbh",
+                                    distribution = FALSE)
+
+Biomass_by_dbh_class <- Biomass_by_dbh_class[order(Biomass_by_dbh_class$Class_DAP_cm
+                                                   , decreasing = FALSE), ]
+
+
+
+barplot(Biomass_by_dbh_class$Biomass_percentage,
+        col = "lightgreen", ylim = c(0,50), ylab="Biomass (%)",
+        xlab= "Alt Classes"
+)
+
+mtext()
 
 class(x)
 str (x)
