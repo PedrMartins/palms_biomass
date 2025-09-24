@@ -51,7 +51,7 @@ boxplot (log (biomass_seca_g_estimada )~ Parcela,
          data= Biomass_palms_archontophoenix,
          ylim = c(down_to_top[1] -1.5,
                   down_to_top [2] + 1.5),
-         col= c(rep ("lightgreen",10), rep("darkgreen",9)),
+         col= c(rep ("lightgreen",2),rep ("green",10), rep("darkgreen",9)),
          pch = "*", xlab = "Parcela",
          ylab = "log Dry Biomass (g)")
 
@@ -78,16 +78,23 @@ barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
 barplot(log (biomass_seca$total_biomass_seca_g),
         col = c(rep("lightgreen", 10),rep ( "darkgreen",9)),
         )
+vioplot::vioplot(biomass_seca_g_estimada ~Transecto,
+        data = Biomass_palms_archontophoenix, pch = "*", log = "y")
 
-# Biomass_palms_archontophoenix [
-#   Biomass_palms_archontophoenix$percentage_dry_biomass == 0,7] <- "NA"
-
+boxplot(biomass_seca_g_estimada ~Transecto,
+                 data = Biomass_palms_archontophoenix, pch = "*", log = "y")
 
 #########linear analyses#################
 #diagnostico do modelo
 
-plot (Biomass_palms_archontophoenix [,c(5,11,13)])
+plot (Biomass_palms_archontophoenix [,c(5,11,13)], pch = 20,
+      col =rgb (0.5,0.5,0,0.3))
 
+plot (Biomass_palms_archontophoenix[,c(11,13)], pch = 20,
+      col =rgb (0.3,0,0.5,0.3) )
+plot (Biomass_palms_archontophoenix[,c(11,13)] )
+plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
+      col =rgb (0.5,0.5,0,0.3))
 
 lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm
                    * DAP_cm* I(DAP_cm^2)
@@ -101,11 +108,12 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                        DAP_cm:I(DAP_cm^2)
                      , data =
                        Biomass_palms_archontophoenix)
-lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
+lm_bio_simple_extreme <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
                        Biomass_palms_archontophoenix) #melhor explicação biológico
-summary(lm_bio_simple)
-par (mfrow = c(2,2))
-plot (lm_bio_simple)
+summary(lm_bio_full)
+summary (lm_bio_simple_extreme)
+summary (lm_bio_simple)
+abline (lm_bio_simple)
 
 plot (data =)
 shapiro.test(lm_bio_full$residuals)
