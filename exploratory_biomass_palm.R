@@ -47,11 +47,11 @@ down_to_top <- range(
   log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
       na.rm = TRUE)
 
-boxplot (log (biomass_seca_g_estimada )~ Parcela,
+boxplot (log (biomass_seca_g_estimada )~ Transecto,
          data= Biomass_palms_archontophoenix,
          ylim = c(down_to_top[1] -1.5,
                   down_to_top [2] + 1.5),
-         col= c(rep ("lightgreen",2),rep ("green",10), rep("darkgreen",9)),
+         col= c("lightgreen","green","darkgreen"),
          pch = "*", xlab = "Parcela",
          ylab = "log Dry Biomass (g)")
 
@@ -75,9 +75,10 @@ barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
         ylim= c(0,250))
 
 
-barplot(log (biomass_seca$total_biomass_seca_g),
-        col = c(rep("lightgreen", 10),rep ( "darkgreen",9)),
-        )
+barplot(log (biomass_seca$total_biomass_seca_g)~
+          biomass_seca$Parcela)
+
+
 vioplot::vioplot(biomass_seca_g_estimada ~Transecto,
         data = Biomass_palms_archontophoenix, pch = "*", log = "y")
 
@@ -88,13 +89,13 @@ boxplot(biomass_seca_g_estimada ~Transecto,
 #diagnostico do modelo
 
 plot (Biomass_palms_archontophoenix [,c(5,11,13)], pch = 20,
-      col =rgb (0.5,0.5,0,0.3))
+      col =rgb (0.3,0,0.5,0.3))
 
 plot (Biomass_palms_archontophoenix[,c(11,13)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
-plot (Biomass_palms_archontophoenix[,c(11,13)] )
+
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
-      col =rgb (0.5,0.5,0,0.3))
+      col =rgb (0.3,0,0.5,0.3))
 
 lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm
                    * DAP_cm* I(DAP_cm^2)
@@ -113,10 +114,14 @@ lm_bio_simple_extreme <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
 summary(lm_bio_full)
 summary (lm_bio_simple_extreme)
 summary (lm_bio_simple)
-abline (lm_bio_simple)
+
 
 plot (data =)
 shapiro.test(lm_bio_full$residuals)
+
+AIC(lm_bio_simple,
+    lm_bio_simple_extreme,
+    lm_bio_full)
 
 #resíduos sem normalidade
 
@@ -140,7 +145,7 @@ AIC (lm_bio_simple,
 #########Classes alt e DBH###########
 
 
-Biomass_by_alt_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "bio",
+Biomass_by_alt_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "ind",
                  class = c(5,15,30,50,150),dbh_alt="alt",
                  distribution = FALSE)
 
