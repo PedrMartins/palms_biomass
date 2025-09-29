@@ -152,7 +152,7 @@ Biomass_by_alt_class$Class_Alt_cm <- factor(Biomass_by_alt_class$Class_Alt_cm,
        levels = c(Biomass_by_alt_class$Class_Alt_cm))
 
 
-Status_dbh <- stats_DBH_Alt (Biomass_palms_archontophoenix,
+Stats_dbh <- stats_DBH_Alt (Biomass_palms_archontophoenix,
                              dbh_alt = "dbh",
                              class=c(1,2,3,4,5,6,7))
 
@@ -160,11 +160,12 @@ Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
                             class= c(5,15,30,50,150),
                             dbh_alt = "alt")
 
-colnames(Stats_alt[,-1])  <- c("mean_biomass",
+colnames(Stats_alt)[-1] <- c("mean_biomass",
                                "Standard_deviation",
                                "Sample")
 
-write.table(Stats_alt, "Stats_alt.csv")
+write.table(Stats_alt, "Stats_alt.csv",
+            sep = "\t")
 
 Biomass_by_alt_class <- Biomass_by_alt_class[order(Biomass_by_alt_class$Class_Alt_cm
                                                    , decreasing = TRUE), ]
