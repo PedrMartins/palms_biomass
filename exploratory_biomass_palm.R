@@ -1,7 +1,6 @@
 library(readxl)
 library(dplyr)
 library(mgcv)
-library(vegan)
 source("function.R")
 
 # function class_DBH_alt (x, choice = "ind",
