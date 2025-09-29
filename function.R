@@ -321,7 +321,11 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                     mean=mean(site_class$biomass_seca_g_estimada,
                                           na.rm = TRUE ),
                     SD=sd(site_class$biomass_seca_g_estimada,
-                          na.rm = T))
+                          na.rm = T),
+                    N=length(
+                      na.omit(site_class$biomass_seca_g_estimada)
+                      )
+                    )
 
       }else {
 
@@ -331,7 +335,11 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                     mean=mean(site_class$biomass_seca_g_estimada,
                                           na.rm = TRUE ),
                     SD=sd(site_class$biomass_seca_g_estimada,
-                          na.rm = T))
+                          na.rm = T),
+                    N=length(
+                      na.omit(site_class$biomass_seca_g_estimada)
+                    )
+                    )
       }
     } else {
       if(diametre_altura==2){
@@ -340,11 +348,14 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
           if (i==1){
             site_class<-  site [site$DAP_cm<class [1],]
             subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(class[1]),
+              summarise(dbh_class_cm =  as.character(class[1]),
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        ))
 
             data_biomass <- rbind(subset_data_bio,data_biomass)
           }
@@ -353,23 +364,31 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
           if (is.na(upper_bound)==TRUE) {
             site_class<-  site [site$DAP_cm >= lower_bound,]
             subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(class[i]),
+              summarise(dbh_class_cm =  as.character(class[i]),
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        )
+                        )
 
           }else {
 
             site_class<-   site[site$DAP_cm >= lower_bound &
                                       site$DAP_cm < upper_bound, ]
             subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(paste (lower_bound,upper_bound,
+              summarise(dbh_class_cm =  as.character(paste (lower_bound,upper_bound,
                                                             sep ="_")),
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        )
+                        )
           }
           data_biomass <- rbind(subset_data_bio,data_biomass)
         }
@@ -385,7 +404,10 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        ))
 
             data_biomass <- rbind(subset_data_bio,data_biomass)
 
@@ -399,7 +421,10 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        ))
 
           }else {
             site_class<-   site[site$altura_cm >= lower_bound &
@@ -410,7 +435,10 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                         mean=mean(site_class$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T))
+                              na.rm = T),
+                        N=length(
+                          na.omit(site_class$biomass_seca_g_estimada)
+                        ))
 
           }
           data_biomass <- rbind(subset_data_bio,data_biomass)
@@ -426,6 +454,3 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
 
 }
 
-stats_DBH_Alt (Biomass_palms_archontophoenix, dbh_alt = "dbh")
-
-stats_DBH_Alt (Biomass_palms_archontophoenix, class= c(5,15,30,150), dbh_alt = "alt")
