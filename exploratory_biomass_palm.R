@@ -87,10 +87,12 @@ boxplot(biomass_seca_g_estimada ~Transecto,
 #########linear analyses#################
 #diagnostico do modelo
 
-par (mfrow =c(1,3))
 
-# plot (Biomass_palms_archontophoenix [,c(5,11,13)], pch = 20,
-#       col =rgb (0.3,0,0.5,0.3))
+
+plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
+      col =rgb (0.3,0,0.5,0.3))
+
+par (mfrow =c(2,2))
 
 plot (Biomass_palms_archontophoenix[,c(11,13)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
@@ -99,6 +101,9 @@ plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
+      col =rgb (0.3,0,0.5,0.3))
+
+plot (Biomass_palms_archontophoenix[,c(14,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
 Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm
