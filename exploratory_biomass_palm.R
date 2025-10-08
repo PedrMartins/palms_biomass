@@ -87,10 +87,12 @@ boxplot(biomass_seca_g_estimada ~Transecto,
 #########linear analyses#################
 #diagnostico do modelo
 
-
+Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^2
 
 plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
+
+cor(na.omit (Biomass_palms_archontophoenix [,c(5,11,13, 14)]))
 
 par (mfrow =c(2,2))
 
@@ -99,6 +101,7 @@ plot (Biomass_palms_archontophoenix[,c(11,13)], pch = 20,
 
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
+abline (lm_bio_h)
 
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
@@ -106,9 +109,6 @@ plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
 plot (Biomass_palms_archontophoenix[,c(14,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm
-names (Biomass_palms_archontophoenix)
-cor(na.omit (Biomass_palms_archontophoenix [,c(5,11,13, 14)]))
 
 lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm
                    * DAP_cm* I(DAP_cm^2)
@@ -124,17 +124,31 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                        Biomass_palms_archontophoenix)
 lm_bio_simple_extreme <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
                        Biomass_palms_archontophoenix) #melhor explicação biológico
+
+lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
+                               Biomass_palms_archontophoenix) #melhor explicação biológico
+
+lm_bio_H_Dsq <- lm (biomass_seca_g_estimada~ altura_cm + I(DAP_cm^2), data =
+                               Biomass_palms_archontophoenix)
+
+
 summary(lm_bio_full)
 summary (lm_bio_simple_extreme)
 summary (lm_bio_simple)
+summary (lm_bio_h)
+summary (lm_bio_H_Dsq)
+
+par (mfrow = c(2,2))
+plot (lm_bio_H_Dsq)
 
 
-plot (data =)
+
+
 shapiro.test(lm_bio_full$residuals)
 
-AIC(lm_bio_simple,
-    lm_bio_simple_extreme,
-    lm_bio_full)
+AIC(lm_bio_h,
+    lm_bio_H_Dsq,
+    lm_bio_simple_extreme)
 
 #resíduos sem normalidade
 
