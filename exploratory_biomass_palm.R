@@ -92,16 +92,27 @@ Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^
 plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-cor(na.omit (Biomass_palms_archontophoenix [,c(5,11,13, 14)]))
+Biomass_palms_archontophoenix$pred <-  predict(lm_bio_H_Dsq, newdata = Biomass_palms_archontophoenix,
+                                               na.rm = TRUE)
 
-par (mfrow =c(2,2))
-
-plot (Biomass_palms_archontophoenix[,c(11,13)], pch = 20,
+plot (Biomass_palms_archontophoenix[,c(5,13)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
+abline (lm_bio_h, col = "red",
+      lty = 2)
+
+
+curve (
+  expr =  -105.3075 + 6.4434 *h + 5.2015 * x,
+  col = "blue",
+       lty=4,
+  add =TRUE
+  )
+
+
 
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
-abline (lm_bio_h)
+
 
 plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
