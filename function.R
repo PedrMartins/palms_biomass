@@ -315,9 +315,17 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
 
     if (length(class)==1) {
       if (diametre_altura==2){
-        site_class<-  site [site$DAP_cm<class,]
-        data_biomass <- site_class %>%
-          summarise(dbh_class_cm =  as.character(class),
+        site<-  site [site$DAP_cm<class,]
+        parcel <- unique(site$Parcela)
+        data_biomass <- data.frame()
+
+        for (i in parcel){
+
+          site_class <- site[site$Parcela == i,]
+
+          data_parcel <- site_class %>%
+          summarise(parcel= as.character(i),
+                    dbh_class_cm =  as.character(class),
                     mean=mean(site_class$biomass_seca_g_estimada,
                                           na.rm = TRUE ),
                     SD=sd(site_class$biomass_seca_g_estimada,
@@ -326,20 +334,34 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                       na.omit(site_class$biomass_seca_g_estimada)
                       )
                     )
+        data_biomass <-  rbind(data_parcel, data_biomass)
+        }
 
       }else {
 
-        site_class<-  site [site$altura_cm<class,]
-        data_biomass <- site_class %>%
-          summarise(alt_class_cm =  as.character(class),
-                    mean=mean(site_class$biomass_seca_g_estimada,
-                                          na.rm = TRUE ),
-                    SD=sd(site_class$biomass_seca_g_estimada,
-                          na.rm = T),
-                    N=length(
-                      na.omit(site_class$biomass_seca_g_estimada)
-                    )
-                    )
+       browser()
+        site<-  site [site$altura_cm<class,]
+        parcel <- unique(site$Parcela)
+        parcel <- na.omit(parcel)[1]
+        data_biomass <- data.frame()
+
+         for (i in parcel){
+
+          site_class <- site[site$Parcela == i,]
+
+          data_parcel <- site_class %>%
+            summarise(parcel = as.character(i),
+                      alt_class_cm =  as.character(class),
+                      mean=mean(site_class$biomass_seca_g_estimada,
+                                            na.rm = TRUE ),
+                      SD=sd(site_class$biomass_seca_g_estimada,
+                            na.rm = T),
+                      N=length(
+                        na.omit(site_class$biomass_seca_g_estimada)
+                      )
+                      )
+          data_biomass <-  rbind(data_parcel, data_biomass)
+        }
       }
     } else {
       if(diametre_altura==2){
