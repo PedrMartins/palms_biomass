@@ -14,15 +14,14 @@ names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
                                                  "percentage_dry_biomass")
 
 Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
-Biomass_palms_archontophoenix$Transecto_Parcela <-  paste (Biomass_palms_archontophoenix$Transecto,
-                                                   Biomass_palms_archontophoenix$Parcela,
-                                                   sep="_")
 
 fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
                           na.rm = TRUE)
 
 Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
   Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
+
+Biomass_palms_archontophoenix <- Biomass_palms_archontophoenix[,-c(7,8,10)]
 
 # View (Biomass_palms_archontophoenix [c(294,
 #                                        444,
