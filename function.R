@@ -10,11 +10,11 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
         site <- na.omit(site)
         parcel <- unique(site$Parcela)
         data_biomass <- data.frame()
+        browser()
 
         for (i in parcel){
 
           site_class <- site[site$Parcela == i,]
-
 
           data_parcel <- site_class %>%
           summarise(parcel= as.character(i),
@@ -23,6 +23,7 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
                                           na.rm = TRUE ),
                     SD=sd(site_class$biomass_seca_g_estimada,
                           na.rm = T),
+                    basal_area = sum (pi * (site_class$DAP_cm^2/4)), #teste
                     N=length(
                       na.omit(site_class$biomass_seca_g_estimada)
                       )
