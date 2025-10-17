@@ -23,6 +23,7 @@ Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
 
 Biomass_palms_archontophoenix <- Biomass_palms_archontophoenix[,-c(7,8,10)]
 
+
 # View (Biomass_palms_archontophoenix [c(294,
 #                                        444,
 #                                        445),]) #dados influentes no modelo
@@ -182,25 +183,14 @@ AIC (lm_bio_simple,
 #########Classes alt e DBH###########
 
 
-Biomass_by_alt_class=class_DBH_alt (Biomass_palms_archontophoenix, choice = "ind",
-                 class = c(5,15,30,50,150),dbh_alt="alt",
-                 distribution = FALSE)
-
-Biomass_by_alt_class$Class_Alt_cm <- factor(Biomass_by_alt_class$Class_Alt_cm,
-       levels = c(Biomass_by_alt_class$Class_Alt_cm))
-
-
-Stats_dbh <- stats_DBH_Alt (Biomass_palms_archontophoenix,
-                             dbh_alt = "dbh",
-                             class=c(1,2,3,4,5,6,7))
-
 Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
-                            class= c(5,15,30,50,150),
+                            class= c(5,15,30,50),
                             dbh_alt = "alt")
 
-colnames(Stats_alt)[-1] <- c("mean_biomass",
+colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
+                             "Total Biomass g", "Mean Biomass",
                                "Standard_deviation",
-                               "Sample")
+                               "N Sample")
 
 write.table(Stats_alt, "Stats_alt.csv",
             sep = "\t")
