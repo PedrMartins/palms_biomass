@@ -378,6 +378,8 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
               subset_data_bio <- site_class_by_parcel %>%
               summarise(parcel= as.character(j),
                         dbh_class_cm =  as.character(class[1]),
+                        biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                            na.rm = TRUE)/1000,
                         mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
@@ -401,6 +403,8 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
               subset_data_bio <- site_class_by_parcel %>%
                 summarise(parcel= as.character(j),
                           dbh_class_cm =  as.character(lower_bound),
+                          biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                              na.rm = TRUE)/1000,
                           mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
                                     na.rm = TRUE ),
                           SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
@@ -412,16 +416,6 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
 
               data_biomass <- rbind(subset_data_bio,data_biomass)
             }
-            subset_data_bio <- site_class %>%
-              summarise(dbh_class_cm =  as.character(class[i]),
-                        mean=mean(site_class$biomass_seca_g_estimada,
-                                              na.rm = TRUE ),
-                        SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T),
-                        N=length(
-                          na.omit(site_class$biomass_seca_g_estimada)
-                        )
-                        )
 
           }else {
 
@@ -436,6 +430,8 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
               summarise(parcel= as.character(j),
                         dbh_class_cm =  as.character(paste (lower_bound,upper_bound,
                                                             sep ="_")),
+                        biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                            na.rm = TRUE)/1000,
                         mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
                                               na.rm = TRUE ),
                         SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
@@ -456,49 +452,81 @@ stats_DBH_Alt <- function (x,class = 5, dbh_alt="alt"){
         for (i in seq_along(class)){
           if (i==1){
             site_class<-  site [site$altura_cm<class [1],]
-            subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(class[1]),
-                        mean=mean(site_class$biomass_seca_g_estimada,
-                                              na.rm = TRUE ),
-                        SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T),
-                        N=length(
-                          na.omit(site_class$biomass_seca_g_estimada)
-                        ))
+            parcel <-  unique(site$Parcela)
+            for (j in parcel){
+              site_class_by_parcel <- site_class[site_class$Parcela == j,]
 
-            data_biomass <- rbind(subset_data_bio,data_biomass)
+              subset_data_bio <- site_class_by_parcel %>%
+                summarise(parcel= as.character(j),
+                          alt_class_cm =  as.character(class[1]),
+                          biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                              na.rm = TRUE)/1000,
+                          mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
+                                    na.rm = TRUE ),
+                          SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
+                                na.rm = T),
+                          N=length(
+                            na.omit(site_class_by_parcel$biomass_seca_g_estimada)
+                          ))
+
+
+              data_biomass <- rbind(subset_data_bio,data_biomass)
+            }
+
 
           }
           lower_bound <- class[i]
           upper_bound <- class[i + 1]
+          parcel = unique(site$Parcela)
           if (is.na(upper_bound)==TRUE) {
             site_class<-  site [site$altura_cm >= lower_bound,]
-            subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(class[i]),
-                        mean=mean(site_class$biomass_seca_g_estimada,
-                                              na.rm = TRUE ),
-                        SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T),
-                        N=length(
-                          na.omit(site_class$biomass_seca_g_estimada)
-                        ))
+            for (j in parcel){
+              site_class_by_parcel <- site_class[site_class$Parcela == j,]
+
+              subset_data_bio <- site_class_by_parcel %>%
+                summarise(parcel= as.character(j),
+                          alt_class_cm =  as.character(lower_bound),
+                          biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                              na.rm = TRUE)/1000,
+                          mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
+                                    na.rm = TRUE ),
+                          SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
+                                na.rm = T),
+                          N=length(
+                            na.omit(site_class_by_parcel$biomass_seca_g_estimada)
+                          ))
+
+
+              data_biomass <- rbind(subset_data_bio,data_biomass)
+            }
+
 
           }else {
             site_class<-   site[site$altura_cm >= lower_bound &
                                   site$altura_cm < upper_bound, ]
-            subset_data_bio <- site_class %>%
-              summarise(alt_class_cm =  as.character(paste (lower_bound,upper_bound,
-                                                            sep ="_")),
-                        mean=mean(site_class$biomass_seca_g_estimada,
-                                              na.rm = TRUE ),
-                        SD=sd(site_class$biomass_seca_g_estimada,
-                              na.rm = T),
-                        N=length(
-                          na.omit(site_class$biomass_seca_g_estimada)
-                        ))
+            for (j in parcel) {
+
+              site_class_by_parcel <- site_class[site_class$Parcela == j,]
+              subset_data_bio <- site_class_by_parcel %>%
+                summarise(parcel= as.character(j),
+                          alt_class_cm =  as.character(paste (lower_bound,upper_bound,
+                                                              sep ="_")),
+                          biomass_total= sum (site_class_by_parcel$biomass_seca_g_estimada,
+                                              na.rm = TRUE)/1000,
+                          mean=mean(site_class_by_parcel$biomass_seca_g_estimada,
+                                    na.rm = TRUE ),
+                          SD=sd(site_class_by_parcel$biomass_seca_g_estimada,
+                                na.rm = T),
+                          N=length(
+                            na.omit(site_class_by_parcel$biomass_seca_g_estimada)
+                          )
+                )
+              data_biomass <- rbind(subset_data_bio,data_biomass)
+            }
+
 
           }
-          data_biomass <- rbind(subset_data_bio,data_biomass)
+
         }
 
       }
