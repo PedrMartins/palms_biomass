@@ -180,7 +180,7 @@ AIC (lm_bio_simple,
      lm_bio_full)
 
 
-#########Classes alt e DBH###########
+#########stats_Classes_alt_DBH###########
 
 
 Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
@@ -190,17 +190,17 @@ Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
 colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
                          "Total Biomass g", "Basal Area²",
                          "Basal Area by m²" ,"Mean Biomass",
-                         "Standard_deviation","N Sample")
+                         "Standard deviation","N Sample")
 
 write.table(Stats_alt, "Stats_alt.csv",
             sep = "\t", dec = ",")
 
-Biomass_by_alt_class <- Biomass_by_alt_class[order(Biomass_by_alt_class$Class_Alt_cm
-                                                   , decreasing = TRUE), ]
+Biomass_by_alt_class <- Stats_alt[order(Stats_alt$alt_class_cm
+                                        , decreasing = TRUE), ]
 
 
-barplot(Biomass_by_alt_class$Biomass_percentage,
-        col = "lightgreen", ylim = c(0,50), ylab="Biomass (%)",
+barplot(Biomass_by_alt_class$biomass_total ,
+        col = "lightgreen", ylab="Biomass (%)",
         xlab= "Alt Classes cm"
         )
 mtext(c ("5","5-15",
