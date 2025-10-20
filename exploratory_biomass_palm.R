@@ -188,12 +188,12 @@ Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
                             dbh_alt = "alt")
 
 colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
-                             "Total Biomass g", "Mean Biomass",
-                               "Standard_deviation",
-                               "N Sample")
+                         "Total Biomass g", "Basal Area²",
+                         "Basal Area by m²" ,"Mean Biomass",
+                         "Standard_deviation","N Sample")
 
 write.table(Stats_alt, "Stats_alt.csv",
-            sep = "\t")
+            sep = "\t", dec = ",")
 
 Biomass_by_alt_class <- Biomass_by_alt_class[order(Biomass_by_alt_class$Class_Alt_cm
                                                    , decreasing = TRUE), ]
