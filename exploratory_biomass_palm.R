@@ -1,28 +1,10 @@
-library(readxl)
-library(dplyr)
-library(mgcv)
-source("function.R")
+
+
 
 # function class_DBH_alt (x, choice = "ind",
 # class = 5, dbh_alt="alt", distribution = FALSE) default
 
 ############Processing data#####
-Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
-names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
-                                                 "biomassa_fresca_g",
-                                                 "biomass_seca_g",
-                                                 "percentage_dry_biomass")
-
-Biomass_palms_archontophoenix$DAP_cm <- c(Biomass_palms_archontophoenix$DAP_mm/10)
-
-fator_de_correção <- mean(Biomass_palms_archontophoenix$percentage_dry_biomass,
-                          na.rm = TRUE)
-
-Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
-  Biomass_palms_archontophoenix$biomassa_fresca_g * fator_de_correção
-
-Biomass_palms_archontophoenix <- Biomass_palms_archontophoenix[,-c(7,8,10)]
-
 
 # View (Biomass_palms_archontophoenix [c(294,
 #                                        444,
