@@ -1,5 +1,4 @@
-
-
+source("function.R")
 
 # function class_DBH_alt (x, choice = "ind",
 # class = 5, dbh_alt="alt", distribution = FALSE) default
@@ -45,7 +44,7 @@ legend("topleft" #fun��o adiciona um texto ao gr�fico,
        , pch=c(15,15)
        ,bty = "n") #tipo da fonte
 
-#########teste de normalidade ########
+######### barplot  ########
 source ("Processing_to_plot.R")
 
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
@@ -68,6 +67,8 @@ boxplot(biomass_seca_g_estimada ~Transecto,
 
 #########linear analyses#################
 #diagnostico do modelo
+
+
 
 Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^2
 
@@ -92,14 +93,14 @@ curve (
 
 
 
-plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
+plot (Biomass_palms_archontophoenix[,c(8,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
 
-plot (Biomass_palms_archontophoenix[,c(11,5)], pch = 20,
+plot (Biomass_palms_archontophoenix[,c(5,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-plot (Biomass_palms_archontophoenix[,c(14,5)], pch = 20,
+plot (Biomass_palms_archontophoenix[,c(4,5,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
 
@@ -115,11 +116,19 @@ lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
                        DAP_cm:I(DAP_cm^2)
                      , data =
                        Biomass_palms_archontophoenix)
+
 lm_bio_simple_extreme <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
                        Biomass_palms_archontophoenix) #melhor explicação biológico
 
+Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
+
 lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
                                Biomass_palms_archontophoenix) #melhor explicação biológico
+plot (biomass_seca_g_estimada~ altura_cm, data =
+        Biomass_palms_archontophoenix, pch = 20,
+      col =rgb (0.3,0,0.5,0.3))
+abline (lm_bio_h)
+dev.off()
 
 lm_bio_H_Dsq <- lm (biomass_seca_g_estimada~ altura_cm + I(DAP_cm^2), data =
                                Biomass_palms_archontophoenix)

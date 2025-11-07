@@ -1,3 +1,7 @@
+library(readxl)
+library(dplyr)
+library(mgcv)
+
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",
                                                  "biomassa_fresca_g",
@@ -14,6 +18,11 @@ Biomass_palms_archontophoenix$biomass_seca_g_estimada <-
 
 Biomass_palms_archontophoenix <- Biomass_palms_archontophoenix[,-c(7,8,10)]
 
+# out_biomass=boxplot.stats(Biomass_palms_archontophoenix$biomass_seca_g_estimada)
+# out_biomass <- c (out_biomass$out)
+# Biomass_palms_archontophoenix <- Biomass_palms_archontophoenix[
+#   !Biomass_palms_archontophoenix$biomass_seca_g_estimada %in% out_biomass,
+# ]
 
 
 
