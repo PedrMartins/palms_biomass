@@ -128,7 +128,7 @@ plot (biomass_seca_g_estimada~ altura_cm, data =
         Biomass_palms_archontophoenix, pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 abline (lm_bio_h)
-dev.off()
+
 
 lm_bio_H_Dsq <- lm (biomass_seca_g_estimada~ altura_cm + I(DAP_cm^2), data =
                                Biomass_palms_archontophoenix)
