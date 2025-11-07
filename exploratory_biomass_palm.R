@@ -75,8 +75,6 @@ Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^
 plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-Biomass_palms_archontophoenix$pred <-  predict(lm_bio_H_Dsq, newdata = Biomass_palms_archontophoenix,
-                                               na.rm = TRUE)
 
 plot (Biomass_palms_archontophoenix[,c(5,13)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
@@ -125,7 +123,7 @@ Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
 lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
                                Biomass_palms_archontophoenix) #melhor explicação biológico
 plot (biomass_seca_g_estimada~ altura_cm, data =
-        Biomass_palms_archontophoenix, pch = 20,
+        Biomass_palms_archontophoenix, pch = "*",
       col =rgb (0.3,0,0.5,0.3))
 abline (lm_bio_h)
 
