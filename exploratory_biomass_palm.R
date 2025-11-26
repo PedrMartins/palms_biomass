@@ -75,8 +75,8 @@ Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^
 plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-
-plot (Biomass_palms_archontophoenix[,c(5,13)], pch = 20,
+par (mar=c(3,4,4,2), bty ="l")
+plot (Biomass_palms_archontophoenix[,c(5,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
 abline (lm_bio_h, col = "red",
       lty = 2)
@@ -122,10 +122,16 @@ Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
 
 lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
                                Biomass_palms_archontophoenix) #melhor explicação biológico
+
+
+par (mar=c(5,4,4,2), bty ="l")
 plot (biomass_seca_g_estimada~ altura_cm, data =
         Biomass_palms_archontophoenix, pch = "*",
-      col =rgb (0.3,0,0.5,0.3))
-abline (lm_bio_h)
+      col =rgb (0.3,0,0.5,0.3),
+      ylab = "Biomassa (g)",
+      xlab = "Altura")
+abline (lm_bio_h, lty = 2, col = "red", lwd =2)
+text(x=20,y=2200, "r² = 0,93")
 
 
 lm_bio_H_Dsq <- lm (biomass_seca_g_estimada~ altura_cm + I(DAP_cm^2), data =
@@ -216,3 +222,7 @@ mtext()
 class(x)
 str (x)
 #####################################
+
+barplot(Biomass_palms_archontophoenix$Parcela ~ Biomass_palms_archontophoenix$Individuo
+        )
+
