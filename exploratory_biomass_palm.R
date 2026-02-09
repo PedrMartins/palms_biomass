@@ -47,20 +47,89 @@ legend("topleft" #fun��o adiciona um texto ao gr�fico,
 ######### barplot  ########
 source ("Processing_to_plot.R")
 
+range (ind_par_transce$n)
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
 
+jpeg("parcela_ind.jpg", width = 1800,height = 800)
+par (mar = c(5,5,2,1), tcl=-0.3, cex.axis = 1.5,
+     cex.lab= 2)
+
 barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
-        ylab =" Indivíduos", xlab = "Parcela",
-        ylim= c(0,250))
+        ylab =" Indivíduos", xlab = "Sub-Parcela",
+        ylim= c(0,250), col ="lightgreen")
+
+dev.off()
+
+Stats_alt$alt_class_cm <- as.character(Stats_alt$alt_class_cm)
+alt_levels <- c("5", "5_15", "15_30","30_50", "50")
+Stats_alt$alt_class_cm <- factor(
+  Stats_alt$alt_class_cm,
+  levels = alt_levels,
+  ordered = TRUE
+)
+
+
+ggplot(Stats_alt, aes(x = alt_class_cm , y = mean)) +
+  geom_bar(stat = "identity", position = position_dodge(0.9),
+           color = "lightgreen")  +
+  geom_errorbar(aes(ymin = mean - SD, ymax = mean + SD),
+                position = position_dodge(0.9), width = 0.2)+
+    labs(x = "Classe de Altura (cm)",
+      y = "Biomassa média (g)")+
+    scale_x_discrete(labels = c("5" = "5",
+                                "5_15" = "6–15",
+                                "15_30" = "16–30",
+                                "30_50" = "31–50",
+                                "50" = "50"))+
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1,
+      vjust = 1
+    )
+  )+
+  facet_wrap(~ parcel )+
+  ggsave(filename = "biomass_mean_se.jpg",
+         width = 2000,height = 1500, units = "px")
 
 
 barplot(log (biomass_seca$total_biomass_seca_g)~
           biomass_seca$Parcela)
 
 
+boxplot (biomass_seca_g_estimada ~Transecto,
+        data = Biomass_palms_archontophoenix,
+        pch = "*")
+
+jpeg(filename = "vioplot_biomass.jpg", width = 850, height = 500, # fun��o salva gr�ficos em .jpg
+     units = "px", quality = 75,
+     bg = "white")
+
+par(mar=c(5,5,3,2), bty = "l",cex.axis=2, cex.lab=2)
+
 vioplot::vioplot(biomass_seca_g_estimada ~Transecto,
-        data = Biomass_palms_archontophoenix, pch = "*", log = "y")
+                 data = Biomass_palms_archontophoenix,
+                 pch = "*", col ="lightgreen",
+                 ylab =  "Biomassa (g)",
+                 xlab = "Parcela")
+
+dev.off ()
+
+jpeg(filename = "barplot_biomass.jpg", width = 850, height = 500, # fun��o salva gr�ficos em .jpg
+     units = "px", quality = 75,
+     bg = "white")
+
+par(mar=c(5,5,3,2), bty = "l",cex=2)
+
+barplot(ind_par_transce$n ~ind_par_transce$Transecto,
+                 data = Biomass_palms_archontophoenix,
+                 pch = "*", col ="lightgreen",
+                 ylab =  "Indivíduos",
+                 xlab = "Parcela", ylim = c(0,1200))
+
+dev.off ()
+
 
 boxplot(biomass_seca_g_estimada ~Transecto,
                  data = Biomass_palms_archontophoenix, pch = "*", log = "y")
@@ -75,8 +144,8 @@ Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^
 plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
-
-plot (Biomass_palms_archontophoenix[,c(5,13)], pch = 20,
+par (mar=c(3,4,4,2), bty ="l")
+plot (Biomass_palms_archontophoenix[,c(5,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3) )
 abline (lm_bio_h, col = "red",
       lty = 2)
@@ -122,10 +191,16 @@ Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
 
 lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
                                Biomass_palms_archontophoenix) #melhor explicação biológico
+
+
+par (mar=c(5,4,4,2), bty ="l")
 plot (biomass_seca_g_estimada~ altura_cm, data =
         Biomass_palms_archontophoenix, pch = "*",
-      col =rgb (0.3,0,0.5,0.3))
-abline (lm_bio_h)
+      col =rgb (0.3,0,0.5,0.3),
+      ylab = "Biomassa (g)",
+      xlab = "Altura")
+abline (lm_bio_h, lty = 2, col = "red", lwd =2)
+text(x=20,y=2200, "r² = 0,93")
 
 
 lm_bio_H_Dsq <- lm (biomass_seca_g_estimada~ altura_cm + I(DAP_cm^2), data =
@@ -216,3 +291,7 @@ mtext()
 class(x)
 str (x)
 #####################################
+
+barplot(Biomass_palms_archontophoenix$Parcela ~ Biomass_palms_archontophoenix$Individuo
+        )
+
