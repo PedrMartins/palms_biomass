@@ -21,7 +21,7 @@ anova (aov (biomass_seca_g_estimada ~ Parcela,
 anova (aov (biomass_seca_g_estimada ~ Transecto,
             data = Biomass_palms_archontophoenix))
 
-par (las = 1, bty = "n")
+# par (las = 1, bty = "n")
 
 down_to_top <- range(
   log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
