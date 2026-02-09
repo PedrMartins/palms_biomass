@@ -1,6 +1,14 @@
+pkg <- c("vioplot")
+
+pkg <- pkg[!pkg%in%installed.packages()]
+pkg
+install.packages (pkg)
+
+
 library(readxl)
 library(dplyr)
 library(mgcv)
+library (vioplot)
 
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",

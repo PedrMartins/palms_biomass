@@ -248,7 +248,7 @@ AIC (lm_bio_simple,
 
 
 Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
-                            class= c(5,15,30,50),
+                            class= c(5,15,30,50,100,150,200),
                             dbh_alt = "alt")
 
 colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
