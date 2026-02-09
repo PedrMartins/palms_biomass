@@ -9,6 +9,7 @@ library(readxl)
 library(dplyr)
 library(mgcv)
 library (vioplot)
+library(ggplot2)
 
 Biomass_palms_archontophoenix<- read_excel("biomass_data_matinha_USP.xlsx")
 names (Biomass_palms_archontophoenix)[4:8] <-  c("DAP_mm", "altura_cm",

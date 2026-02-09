@@ -27,7 +27,7 @@ down_to_top <- range(
   log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
       na.rm = TRUE)
 
-boxplot (log (biomass_seca_g_estimada )~ Transecto,
+boxplot (log (biomass_seca_g_estimada+1)~ Transecto,
          data= Biomass_palms_archontophoenix,
          ylim = c(down_to_top[1] -1.5,
                   down_to_top [2] + 1.5),
@@ -47,6 +47,15 @@ legend("topleft" #fun��o adiciona um texto ao gr�fico,
 ######### barplot  ########
 source ("Processing_to_plot.R")
 
+Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
+                           class= c(5,15,30,50,100,150,200),
+                           dbh_alt = "alt")
+
+colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
+                         "Total Biomass g", "Basal Area²",
+                         "Basal Area by m²" ,"Mean Biomass",
+                         "Standard deviation","N Sample")
+
 range (ind_par_transce$n)
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
         ylim = c(0,800), width=1)
@@ -62,7 +71,7 @@ barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
 dev.off()
 
 Stats_alt$alt_class_cm <- as.character(Stats_alt$alt_class_cm)
-alt_levels <- c("5", "5_15", "15_30","30_50", "50")
+alt_levels <- c("5", "5_15", "15_30","30_50", "50_100","100_150", "150_200", "200")
 Stats_alt$alt_class_cm <- factor(
   Stats_alt$alt_class_cm,
   levels = alt_levels,
@@ -247,14 +256,7 @@ AIC (lm_bio_simple,
 #########stats_Classes_alt_DBH###########
 
 
-Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
-                            class= c(5,15,30,50,100,150,200),
-                            dbh_alt = "alt")
 
-colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
-                         "Total Biomass g", "Basal Area²",
-                         "Basal Area by m²" ,"Mean Biomass",
-                         "Standard deviation","N Sample")
 
 write.table(Stats_alt, "Stats_alt.csv",
             sep = "\t", dec = ",")
