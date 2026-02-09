@@ -48,13 +48,13 @@ legend("topleft" #fun��o adiciona um texto ao gr�fico,
 source ("Processing_to_plot.R")
 
 Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
-                           class= c(5,15,30,50,100,150,200),
+                           class= c(5,15,30,50,100,150),
                            dbh_alt = "alt")
 
-colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
-                         "Total Biomass g", "Basal Area²",
-                         "Basal Area by m²" ,"Mean Biomass",
-                         "Standard deviation","N Sample")
+# colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
+#                          "Total Biomass g", "Basal Area²",
+#                          "Basal Area by m²" ,"Mean Biomass",
+#                          "Standard deviation","N Sample")
 
 range (ind_par_transce$n)
 barplot(ind_par_transce$n~ind_par_transce$Transecto,
@@ -71,7 +71,7 @@ barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
 dev.off()
 
 Stats_alt$alt_class_cm <- as.character(Stats_alt$alt_class_cm)
-alt_levels <- c("5", "5_15", "15_30","30_50", "50_100","100_150", "150_200", "200")
+alt_levels <- c("5", "5_15", "15_30","30_50", "50_100","100_150", "150")
 Stats_alt$alt_class_cm <- factor(
   Stats_alt$alt_class_cm,
   levels = alt_levels,
