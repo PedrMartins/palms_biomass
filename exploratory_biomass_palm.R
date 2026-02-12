@@ -10,39 +10,17 @@ source("function.R")
 #                                        445),]) #dados influentes no modelo
 
 
-
-#######exploratoty analyses######
-
-anova (aov (biomass_seca_g_estimada ~ Transecto + Parcela,
-     data = Biomass_palms_archontophoenix))
-
-anova (aov (biomass_seca_g_estimada ~ Parcela,
-            data = Biomass_palms_archontophoenix))
-anova (aov (biomass_seca_g_estimada ~ Transecto,
-            data = Biomass_palms_archontophoenix))
-
-# par (las = 1, bty = "n")
-
 down_to_top <- range(
-  log (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
+  sqrt (Biomass_palms_archontophoenix$biomass_seca_g_estimada),
       na.rm = TRUE)
 
-boxplot (log (biomass_seca_g_estimada+1)~ Transecto,
+par (bty ="l")
+boxplot (sqrt (biomass_seca_g_estimada)~ Transecto,
          data= Biomass_palms_archontophoenix,
-         ylim = c(down_to_top[1] -1.5,
-                  down_to_top [2] + 1.5),
-         col= c("lightgreen","green","darkgreen"),
+         col= c("lightgreen","green","yellowgreen","darkgreen"),
          pch = "*", xlab = "Parcela",
+         log ="y",
          ylab = "log Dry Biomass (g)")
-
-legend("topleft" #fun��o adiciona um texto ao gr�fico,
-       #arg 1� define a localiza��o, usa-se a fun��o locator para
-       #adicionar de uma forma interativa
-       ,c("Transecto 2","Transecto 3") #texto a ser escrito
-       ,col=c ("lightgreen", "darkgreen")
-       ,cex=.5		#tamanho da fonte
-       , pch=c(15,15)
-       ,bty = "n") #tipo da fonte
 
 ######### barplot  ########
 source ("Processing_to_plot.R")
@@ -55,16 +33,16 @@ Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
 #                          "Total Biomass g", "Basal Area²",
 #                          "Basal Area by m²" ,"Mean Biomass",
 #                          "Standard deviation","N Sample")
-
 range (ind_par_transce$n)
-barplot(ind_par_transce$n~ind_par_transce$Transecto,
-        ylim = c(0,800), width=1)
+par (mfrow = c (1,2))
+barplot(biomass_seca$total_biomass_seca_g~biomass_seca$Parcela)
+barplot(ind_par_parcela$n~ind_par_parcela$Parcela, width=1)
 
 jpeg("parcela_ind.jpg", width = 1800,height = 800)
 par (mar = c(5,5,2,1), tcl=-0.3, cex.axis = 1.5,
      cex.lab= 2)
 
-barplot(ind_par_parcela$n~ind_par_parcela$Parcela,
+barplot(ind_par_parcela$b ~ind_par_parcela$Parcela,
         ylab =" Indivíduos", xlab = "Sub-Parcela",
         ylim= c(0,250), col ="lightgreen")
 
@@ -146,26 +124,39 @@ boxplot(biomass_seca_g_estimada ~Transecto,
 #########linear analyses#################
 #diagnostico do modelo
 
+Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
 
+Biomass_palms_archontophoenix$alt_square<- Biomass_palms_archontophoenix$altura_cm^2
 
-Biomass_palms_archontophoenix$dap_square<- Biomass_palms_archontophoenix$DAP_cm^2
+lm_bio_h_poly <- lm (biomass_seca_g_estimada~ poly(altura_cm, 2, raw = T), data =
+                  Biomass_palms_archontophoenix) #melhor explicação biológico
 
-plot (Biomass_palms_archontophoenix [,c(5,11,13, 14)], pch = 20,
-      col =rgb (0.3,0,0.5,0.3))
+lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
+                  Biomass_palms_archontophoenix)
+
+AIC(lm_bio_h, lm_bio_h_poly,lm_bio_als2)
+
+ggplot(Biomass_palms_archontophoenix, aes(x = altura_cm,
+                                          y = biomass_seca_g_estimada)) +
+  geom_point() +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ poly(x, 2),
+    se = TRUE,
+    color = "red"
+  ) +
+  labs(
+    title = "Polynomial Model (Degree 2)",
+    x = "Altura_cm",
+    y = "Biomassa"
+  )
+
 
 par (mar=c(3,4,4,2), bty ="l")
 plot (Biomass_palms_archontophoenix[,c(5,9)], pch = 20,
-      col =rgb (0.3,0,0.5,0.3) )
+      col =rgb (0.3,0,0.5,0.3))
 abline (lm_bio_h, col = "red",
       lty = 2)
-
-
-curve (
-  expr =  -105.3075 + 6.4434 *h + 5.2015 * x,
-  col = "blue",
-       lty=4,
-  add =TRUE
-  )
 
 
 
@@ -180,26 +171,6 @@ plot (Biomass_palms_archontophoenix[,c(4,5,9)], pch = 20,
       col =rgb (0.3,0,0.5,0.3))
 
 
-lm_bio_full <- lm (biomass_seca_g_estimada~ altura_cm
-                   * DAP_cm* I(DAP_cm^2)
-                   * I(altura_cm^2)
-                   , data =
-                     Biomass_palms_archontophoenix)
-
-
-lm_bio_simple <- lm (biomass_seca_g_estimada~ altura_cm * I(altura_cm^2) +
-                       altura_cm:I(DAP_cm^2) +
-                       DAP_cm:I(DAP_cm^2)
-                     , data =
-                       Biomass_palms_archontophoenix)
-
-lm_bio_simple_extreme <- lm (biomass_seca_g_estimada~ altura_cm + DAP_cm, data =
-                       Biomass_palms_archontophoenix) #melhor explicação biológico
-
-Biomass_palms_archontophoenix <- na.omit(Biomass_palms_archontophoenix)
-
-lm_bio_h <- lm (biomass_seca_g_estimada~ altura_cm, data =
-                               Biomass_palms_archontophoenix) #melhor explicação biológico
 
 
 par (mar=c(5,4,4,2), bty ="l")
