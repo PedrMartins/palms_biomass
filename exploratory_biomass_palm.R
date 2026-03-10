@@ -26,8 +26,10 @@ boxplot (sqrt (biomass_seca_g_estimada)~ Transecto,
 source ("Processing_to_plot.R")
 
 Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
-                           class= c(5,15,30,50,100,150),
+                           class= 300,
                            dbh_alt = "alt")
+
+range(Biomass_palms_archontophoenix$altura_cm, na.rm  =T)
 
 # colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
 #                          "Total Biomass g", "Basal Area²",
