@@ -30,6 +30,8 @@ Stats_alt <-stats_DBH_Alt (Biomass_palms_archontophoenix,
                            dbh_alt = "alt")
 View (Stats_alt)
 
+range(Biomass_palms_archontophoenix$altura_cm, na.rm  =T)
+
 # colnames(Stats_alt) <- c("Parcel", "Class by Altitude",
 #                          "Total Biomass g", "Basal Area²",
 #                          "Basal Area by m²" ,"Mean Biomass",
